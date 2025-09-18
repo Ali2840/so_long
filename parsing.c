@@ -19,6 +19,64 @@ char	*strjoin_free(char *s1, char *s2)
 	return (ptr);
 }
 
+int one_player(char **map)
+{
+	int i = 0;
+	int j = 0;
+	int p = 0;
+	while(map[i])
+	{
+		j = 0;	
+		while(map[i][j])
+		{
+			if(map[i][j] == 'P')
+				p++;
+			j++;
+		}
+		i++;
+	}
+	if(p == 1)
+		return(1);
+	else
+		return(0);
+}
+
+int has_collectables(char **map)
+{
+	int i = 0;
+	int j = 0;
+	while(map[i])
+	{
+		j = 0;	
+		while(map[i][j])
+		{
+			if(map[i][j] == 'C')
+				return(1);
+			j++;
+		}
+		i++;
+	}
+	return(0);
+}
+
+int has_exit(char **map)
+{
+	int i = 0;
+	int j = 0;
+	while(map[i])
+	{
+		j = 0;	
+		while(map[i][j])
+		{
+			if(map[i][j] == 'E')
+				return(1);
+			j++;
+		}
+		i++;
+	}
+	return(0);
+}
+
 int	is_ber(char *file)
 {
 	int	len;
@@ -61,7 +119,7 @@ int invalid_chr(char **map)
 
 	while(map[i])
 	{
-		j = 0;
+		j = 0;	
 		while(map[i][j])
 		{
 			if(map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'P' && map[i][j] != 'C')
@@ -114,7 +172,7 @@ int main()
 {
 	char **map = read_map("map.ber");
 	int i = 0;
-	if(invalid_chr(map))
+	if(has_exit(map))
 		printf("valid\n");
 	else
 		printf("invalid\n");
