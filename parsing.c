@@ -19,63 +19,36 @@ char	*strjoin_free(char *s1, char *s2)
 	return (ptr);
 }
 
-int one_player(char **map)
+int	check_map_elements(char **map)
 {
-	int i = 0;
-	int j = 0;
-	int p = 0;
-	while(map[i])
+	int	i;
+	int	j;
+	int	p;
+	int	c;
+	int	e;
+
+	i = 0;
+	p = 0;
+	c = 0;
+	e = 0;
+	while (map[i])
 	{
-		j = 0;	
-		while(map[i][j])
+		j = 0;
+		while (map[i][j])
 		{
-			if(map[i][j] == 'P')
+			if (map[i][j] == 'P')
 				p++;
+			else if (map[i][j] == 'C')
+				c++;
+			else if (map[i][j] == 'E')
+				e++;
 			j++;
 		}
 		i++;
 	}
-	if(p == 1)
-		return(1);
-	else
-		return(0);
+	return (p == 1 && e == 1 && c > 0);
 }
 
-int has_collectables(char **map)
-{
-	int i = 0;
-	int j = 0;
-	while(map[i])
-	{
-		j = 0;	
-		while(map[i][j])
-		{
-			if(map[i][j] == 'C')
-				return(1);
-			j++;
-		}
-		i++;
-	}
-	return(0);
-}
-
-int has_exit(char **map)
-{
-	int i = 0;
-	int j = 0;
-	while(map[i])
-	{
-		j = 0;	
-		while(map[i][j])
-		{
-			if(map[i][j] == 'E')
-				return(1);
-			j++;
-		}
-		i++;
-	}
-	return(0);
-}
 
 int	is_ber(char *file)
 {
@@ -88,6 +61,7 @@ int	is_ber(char *file)
 		return (1);
 	return (0);
 }
+
 int walls_sorrounded(char **map)
 {
 	int cols;
@@ -168,20 +142,4 @@ int is_retangular(char **map)
 	return(1);
 }
 
-int main()
-{
-	char **map = read_map("map.ber");
-	int i = 0;
-	if(has_exit(map))
-		printf("valid\n");
-	else
-		printf("invalid\n");
-	while(map[i])
-	{
-		printf("%s\n", map[i]);
-		free(map[i]);
-		i++;
-	}
-	free(map); //ainda tens alguns leaks
-}
 	

@@ -2,7 +2,7 @@ NAME = so_long
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = parsing.c gnl/get_next_line_utils.c gnl/get_next_line.c
+SRC = parsing.c parsing_utils.c gnl/get_next_line_utils.c gnl/get_next_line.c
 OBJ = $(SRC:.c=.o)
 
 LIBFT_DIR = Libft
