@@ -1,6 +1,4 @@
-#include "Libft/libft.h"
-#include "gnl/get_next_line.h"
-#include "strings.h"
+#include "so_long.h"
 
 char	*strjoin_free(char *s1, char *s2)
 {
@@ -47,19 +45,6 @@ int	check_map_elements(char **map)
 		i++;
 	}
 	return (p == 1 && e == 1 && c > 0);
-}
-
-
-int	is_ber(char *file)
-{
-	int	len;
-
-	len = ft_strlen(file);
-	if (len < 4)
-		return (0);
-	if (ft_strcmp(file + len - 4, ".ber") == 0)
-		return (1);
-	return (0);
 }
 
 int walls_sorrounded(char **map)
@@ -119,7 +104,7 @@ char	**read_map(char *file)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		join = ft_strjoin(join, line);
+		join = strjoin_free(join, line);
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -129,17 +114,5 @@ char	**read_map(char *file)
 	return (map);
 }
 
-int is_retangular(char **map)
-{
-	size_t len = ft_strlen(map[0]);
-	int i = 1;
-	while(map[i])
-	{
-		if(ft_strlen(map[i]) != len)
-			return(0);
-		i++;
-	}
-	return(1);
-}
 
 	
