@@ -48,20 +48,24 @@ void	error(char **split)
 	exit(EXIT_FAILURE);
 }
 
-int main()
-{
-    char **map = read_map("map.ber");
-    if(!is_ber("map.ber"))
-        error(map);
-    else if(!is_retangular(map))
-        error(map);
-    else if(!walls_sorrounded(map))
-        error(map);
-    else if(!check_map_elements(map))
-        error(map);
-    else if(!flood_fill(map))
-        error(map);
-    else
-        printf("all okk");
-    free_split(map);
-}
+// int main(int ac, char **av)
+// {
+// 	if(ac == 2)
+// 	{
+//     char **map = read_map(av[1]);
+//     if(!is_ber(av[1]))
+//         error(map);
+//     else if(!is_retangular(map))
+//         error(map);
+//     else if(!walls_sorrounded(map))
+//         error(map);
+//     else if(!check_map_elements(map))
+//         error(map);
+//     else if(!flood_fill(map))
+//         error(map);
+//     else
+//         printf("all okk");
+//     free_split(map);
+// 	}
+// 	return(0);
+// }
