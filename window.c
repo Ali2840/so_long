@@ -31,7 +31,7 @@ int main()
 }
 
 
-t_player init_player(t_game game)
+void init_player(t_game game)
 {
 	t_player player;
 	player.moves = 0;
@@ -42,7 +42,19 @@ t_player init_player(t_game game)
 		perror("fuck this");
 	
 }
-t_game init_game(t_map map)
+
+void init_window(t_game game)
 {
+	game.mlx = mlx_init();
+	if(!game.mlx)
+		perror("img fuckeed");
+	game.win = mlx_new_window(game.mlx, 1920, 1080, "SHREK");
+	if(!game.win)
+		perror("fuck windohhhhhhh");
+}
+
+void init_collectibles(t_game game)
+{
+	game.collect.sprite.img_ptr = mlx_xpm_file_to_image(game.mlx, "sprites/burro_grass.xml", &game.collect.sprite.heigth, &game.collect.sprite.width);
 	
 }

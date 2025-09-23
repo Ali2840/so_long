@@ -14,13 +14,9 @@ typedef struct s_point
 
 typedef struct s_img
 {
-	char			*img_addr;
+	char			*img_ptr;
 	int				width;
 	int				heigth;
-	int				bpp;
-	int				l_len;
-	int				endian;
-	int				*img_ptr;
 }	t_img;
 
 typedef struct s_map
@@ -48,8 +44,9 @@ typedef struct s_col
 
 typedef struct s_colls
 {
-	t_col *collectible;
 	t_img sprite;
+	t_point point;
+	int collected;
 } t_colls;
 
 typedef struct s_game
@@ -58,11 +55,15 @@ typedef struct s_game
 	void *win;
 	t_map map;
 	t_img img;
+	t_img floor;
+	t_img walls;
+	t_img exit;
 	t_img base;
 	t_player player;
-	t_colls collectibles;
-	t_img frame_buffer;
+	t_colls collect;
+	int nb_collects;
 } t_game;
+
 
 char	*strjoin_free(char *s1, char *s2);
 int	check_map_elements(char **map);
