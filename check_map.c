@@ -48,24 +48,42 @@ void	error(char **split)
 	exit(EXIT_FAILURE);
 }
 
-// int main(int ac, char **av)
-// {
-// 	if(ac == 2)
-// 	{
-//     char **map = read_map(av[1]);
-//     if(!is_ber(av[1]))
-//         error(map);
-//     else if(!is_retangular(map))
-//         error(map);
-//     else if(!walls_sorrounded(map))
-//         error(map);
-//     else if(!check_map_elements(map))
-//         error(map);
-//     else if(!flood_fill(map))
-//         error(map);
-//     else
-//         printf("all okk");
-//     free_split(map);
-// 	}
-// 	return(0);
-// }
+int main(int ac, char **av)
+{
+    t_game game;
+
+    if (ac != 2)
+    {
+        ft_putendl_fd("Usage: ./so_long map.ber", 2);
+        return (1);
+    }
+    if (!is_ber(av[1]))
+        error(NULL);
+    game.map.grid = read_map(av[1]);
+    if (!game.map.grid)
+        error(NULL);
+
+    game.map.height = 0;
+    while (game.map.grid[game.map.height])
+        game.map.height++;
+    game.map.width = ft_strlen(game.map.grid[0]);
+
+    if (!is_retangular(game.map.grid))
+        error(game.map.grid);
+    if (!walls_sorrounded(game.map.grid))
+        error(game.map.grid);
+    if (!check_map_elements(game.map.grid))
+        error(game.map.grid);
+    if (!flood_fill(game.map.grid))
+    {
+		printf("error flod");
+		exit(1);
+	}
+    init_game(&game);
+    draw_map(&game);
+	mlx_key_hook(game.win, key_handler, &game);
+    mlx_loop(game.mlx);
+    free_split(game.map.grid);
+    free(game.collects);
+    return (0);
+}

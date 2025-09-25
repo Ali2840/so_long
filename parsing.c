@@ -104,6 +104,11 @@ char	**read_map(char *file)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
+		if(line[0] == '\n')
+		{
+			free(line);
+			printf("error");
+		}
 		join = strjoin_free(join, line);
 		free(line);
 		line = get_next_line(fd);
@@ -113,6 +118,3 @@ char	**read_map(char *file)
 	free(join);
 	return (map);
 }
-
-
-	
