@@ -83,8 +83,12 @@ void	init_window(t_game *game)
 		exit(EXIT_FAILURE);
 	}
 	mlx_get_screen_size(game->mlx, &screen_w, &screen_h);
-	if (win_w < screen_w || win_h < screen_h)
-		game->win = mlx_new_window(game->mlx, win_w, win_h, "SHREK");
+	if (win_w > screen_w || win_h > screen_h)
+	{
+		ft_putendl_fd("Error: Window to big for the screen", 2);
+		exit(EXIT_FAILURE);
+	}
+	game->win = mlx_new_window(game->mlx, win_w, win_h, "SHREK");
 	if (!game->win)
 	{
 		perror("mlx_new_window failed");
@@ -106,7 +110,7 @@ void	init_sprites(t_game *game)
 	if (!game->floor.img_ptr || !game->walls.img_ptr || !game->exit.img_ptr
 		|| !game->collectible.img_ptr)
 	{
-		perror("Error loading sprites");
+		ft_putendl_fd("Error loading sprites", 2);
 		exit(EXIT_FAILURE);
 	}
 }
