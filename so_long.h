@@ -9,6 +9,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+#include <stdbool.h>
 
 # define TILE_SIZE 128
 
@@ -64,7 +65,7 @@ int	is_retangular(char **map);
 void	free_split(char **split);
 int	check_reachable(char **map);
 int	flood_fill(char **map);
-void	fill(char **tab, t_point size, int row, int col);
+void fill(char **tab, t_point size, t_point pos, bool *exit);
 char	**map_dup(char **map, int rows);
 t_point	set_begin(char **map);
 int key_handler(int keycode, void *param);
@@ -76,5 +77,6 @@ int	count_collects(t_map mapa);
 void	init_collectibles(t_game *game);
 void	draw_map(t_game *game);
 void move_player(t_game *game, int dx, int dy);
+void free_game(t_game game);
 
 #endif

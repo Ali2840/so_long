@@ -81,7 +81,7 @@ int invalid_chr(char **map)
 		j = 0;	
 		while(map[i][j])
 		{
-			if(map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'P' && map[i][j] != 'C')
+			if(map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'P' && map[i][j] != 'C' && map[i][j] != 'E')
 				return(0);
 			j++;
 		}
