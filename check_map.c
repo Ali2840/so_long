@@ -53,6 +53,7 @@ int	main(int ac, char **av)
 {
 	t_game game;
 
+	ft_bzero(&game, sizeof(t_game));
 	if (ac != 2)
 	{
 		ft_putendl_fd("Usage: ./so_long map.ber", 2);
@@ -63,12 +64,10 @@ int	main(int ac, char **av)
 	game.map.grid = read_map(av[1]);
 	if (!game.map.grid)
 		error(NULL);
-
 	game.map.height = 0;
 	while (game.map.grid[game.map.height])
 		game.map.height++;
 	game.map.width = ft_strlen(game.map.grid[0]);
-
 	if (!is_retangular(game.map.grid))
 		error(game.map.grid);
 	if (!walls_sorrounded(game.map.grid))
@@ -82,8 +81,7 @@ int	main(int ac, char **av)
 	init_game(&game);
 	draw_map(&game);
 	mlx_key_hook(game.win, key_handler, &game);
+	mlx_hook(game.win, 17, 0, close_game, &game);
 	mlx_loop(game.mlx);
-	free_split(game.map.grid);
-	free(game.collects);
 	return (0);
 }

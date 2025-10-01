@@ -47,64 +47,75 @@ int	check_map_elements(char **map)
 	return (p == 1 && e == 1 && c > 0);
 }
 
-int walls_sorrounded(char **map)
+int	walls_sorrounded(char **map)
 {
-	int cols;
-	int rows = 0;
-	int i = 0;
-	while(map[rows])
+	int	cols;
+	int	rows;
+	int	i;
+	int	j;
+
+	rows = 0;
+	i = 0;
+	while (map[rows])
 		rows++;
 	cols = ft_strlen(map[0]);
-	while(i < cols)
+	while (i < cols)
 	{
-		if(map[0][i] != '1' || map[rows - 1][i] != '1')
-			return(0);
+		if (map[0][i] != '1' || map[rows - 1][i] != '1')
+			return (0);
 		i++;
 	}
-	int j = 0;
-	while(j < rows)
+	j = 0;
+	while (j < rows)
 	{
-		if(map[j][0] != '1' || map[j][cols - 1] != '1')
-			return(0);
+		if (map[j][0] != '1' || map[j][cols - 1] != '1')
+			return (0);
 		j++;
 	}
-	return(1);
+	return (1);
 }
 
-int invalid_chr(char **map)
+int	invalid_chr(char **map)
 {
-	int i = 0;
-	int j = 0;
+	int	i;
+	int	j;
 
-	while(map[i])
+	i = 0;
+	j = 0;
+	while (map[i])
 	{
-		j = 0;	
-		while(map[i][j])
+		j = 0;
+		while (map[i][j])
 		{
-			if(map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'P' && map[i][j] != 'C' && map[i][j] != 'E')
-				return(0);
+			if (map[i][j] != '1' && map[i][j] != '0' && map[i][j] != 'P'
+				&& map[i][j] != 'C' && map[i][j] != 'E')
+				return (0);
 			j++;
 		}
 		i++;
 	}
-	return(1);
+	return (1);
 }
 
 char	**read_map(char *file)
 {
-	if(!is_ber(file))
-		return(NULL);
-	char **map;
-	char *line;
-	char *join;
+	char	**map;
+	char	*line;
+	char	*join;
+	int		fd;
+
+	if (!is_ber(file))
+		return (NULL);
 	join = ft_strdup("");
-	if(!join)
-		return(NULL);
-	int fd = open(file, O_RDONLY);
+	if (!join)
+	{
+		return (NULL);
+	}
+	fd = open(file, O_RDONLY);
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		if(line[0] == '\n')
+		if (line[0] == '\n')
 		{
 			free(line);
 			printf("error");

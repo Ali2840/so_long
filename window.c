@@ -1,36 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   window.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gocaetan <gocaetan@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/01 10:46:59 by gocaetan          #+#    #+#             */
+/*   Updated: 2025/10/01 12:57:25 by gocaetan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
-
-// int	main(void)
-// {
-// 	void	*mlx;
-// 	void	*mlx_win;
-// 	void	*img;
-// 	int		h;
-// 	int		w;
-
-// 	h = 0;
-// 	w = 0;
-// 	mlx = mlx_init();
-// 	if (!mlx)
-// 	{
-// 		printf("Erro: mlx_init falhou\n");
-// 		return (1);
-// 	}
-// 	mlx_win = mlx_new_window(mlx, 1920, 1080, "Benficaaaa");
-// 	if (!mlx_win)
-// 	{
-// 		printf("Erro: janela não criada\n");
-// 		return (1);
-// 	}
-// 	img = mlx_xpm_file_to_image(mlx, "bathroom_grass.xpm", &h, &w);
-// 	if (!img)
-// 	{
-// 		printf("Erro: imagem não carregada\n");
-// 		return (1);
-// 	}
-// 	mlx_put_image_to_window(mlx, mlx_win, img, 200, 400);
-// 	mlx_loop(mlx);
-// }
 
 void	draw_map(t_game *game)
 {
@@ -56,8 +36,14 @@ void	draw_map(t_game *game)
 				mlx_put_image_to_window(game->mlx, game->win,
 					game->player.sprite.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
 			else if (tile == 'E')
-				mlx_put_image_to_window(game->mlx, game->win,
-					game->exit.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
+			{
+				if (game->map.collectibles == game->player.collected)
+					mlx_put_image_to_window(game->mlx, game->win,
+						game->exit_win.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
+				else
+					mlx_put_image_to_window(game->mlx, game->win,
+						game->exit.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
+			}
 			else
 				mlx_put_image_to_window(game->mlx, game->win,
 					game->floor.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
@@ -80,19 +66,19 @@ void	init_window(t_game *game)
 	if (!game->mlx)
 	{
 		perror("mlx_init failed");
-		exit(EXIT_FAILURE);
+		free_game(*game);
 	}
 	mlx_get_screen_size(game->mlx, &screen_w, &screen_h);
 	if (win_w > screen_w || win_h > screen_h)
 	{
 		ft_putendl_fd("Error: Window to big for the screen", 2);
-		exit(EXIT_FAILURE);
+		free_game(*game);
 	}
 	game->win = mlx_new_window(game->mlx, win_w, win_h, "SHREK");
 	if (!game->win)
 	{
 		perror("mlx_new_window failed");
-		exit(EXIT_FAILURE);
+		free_game(*game);
 	}
 }
 
@@ -102,16 +88,18 @@ void	init_sprites(t_game *game)
 			&game->floor.width, &game->floor.height);
 	game->walls.img_ptr = mlx_xpm_file_to_image(game->mlx, "sprites/wall.xpm",
 			&game->walls.width, &game->walls.height);
-	game->exit.img_ptr = mlx_xpm_file_to_image(game->mlx, "sprites/exit.xpm",
+	game->exit.img_ptr = mlx_xpm_file_to_image(game->mlx, "sprites/exit2.xpm",
 			&game->exit.width, &game->exit.height);
 	game->collectible.img_ptr = mlx_xpm_file_to_image(game->mlx,
 			"sprites/burro.xpm", &game->collectible.width,
 			&game->collectible.height);
+	game->exit_win.img_ptr = mlx_xpm_file_to_image(game->mlx,
+			"sprites/exit1.xpm", &game->exit_win.width, &game->exit_win.height);
 	if (!game->floor.img_ptr || !game->walls.img_ptr || !game->exit.img_ptr
 		|| !game->collectible.img_ptr)
 	{
 		ft_putendl_fd("Error loading sprites", 2);
-		exit(EXIT_FAILURE);
+		free_game(*game);
 	}
 }
 
@@ -126,9 +114,10 @@ void	init_player(t_game *game)
 	if (!game->player.sprite.img_ptr)
 	{
 		perror("Error loading player sprite");
-		exit(EXIT_FAILURE);
+		free_game(*game);
 	}
 }
+
 int	count_collects(t_map mapa)
 {
 	int	i;
@@ -173,7 +162,7 @@ void	init_collectibles(t_game *game)
 	if (!game->collects)
 	{
 		perror("malloc failed for collects");
-		exit(EXIT_FAILURE);
+		free_game(*game);
 	}
 	while (map.grid[i])
 	{

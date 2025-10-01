@@ -49,6 +49,7 @@ typedef struct s_game
 	t_map map;
 	t_img floor;
 	t_img walls;
+	t_img exit_win;
 	t_img exit;
 	t_img collectible;
 	t_player player;
@@ -78,5 +79,6 @@ void	init_collectibles(t_game *game);
 void	draw_map(t_game *game);
 void move_player(t_game *game, int dx, int dy);
 void free_game(t_game game);
+int	close_game(t_game *game);
 
 #endif
