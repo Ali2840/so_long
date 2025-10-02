@@ -43,11 +43,17 @@ int	key_handler(int keycode, void *param)
 	if (keycode == 119)
 		move_player(game, 0, -1);
 	if (keycode == 97)
+	{
+		game->player.current_sprite = game->player.l_sprite;
 		move_player(game, -1, 0);
+	}
 	if (keycode == 115)
 		move_player(game, 0, 1);
 	if (keycode == 100)
+	{
+		game->player.current_sprite = game->player.sprite;
 		move_player(game, 1, 0);
+	}
 	return (0);
 }
 
@@ -59,28 +65,30 @@ int	close_game(t_game *game)
 
 void	free_game(t_game game)
 {
-	if(game.floor.img_ptr)
+	if (game.floor.img_ptr)
 		mlx_destroy_image(game.mlx, game.floor.img_ptr);
-	if(game.walls.img_ptr)
+	if (game.walls.img_ptr)
 		mlx_destroy_image(game.mlx, game.walls.img_ptr);
-	if(game.exit.img_ptr)
+	if (game.exit.img_ptr)
 		mlx_destroy_image(game.mlx, game.exit.img_ptr);
-	if(game.exit_win.img_ptr)
+	if (game.exit_win.img_ptr)
 		mlx_destroy_image(game.mlx, game.exit_win.img_ptr);
-	if(game.collectible.img_ptr)
+	if (game.collectible.img_ptr)
 		mlx_destroy_image(game.mlx, game.collectible.img_ptr);
-	if(game.player.sprite.img_ptr)
+	if (game.player.sprite.img_ptr)
 		mlx_destroy_image(game.mlx, game.player.sprite.img_ptr);
-	if(game.win)
+	if (game.player.l_sprite.img_ptr)
+		mlx_destroy_image(game.mlx, game.player.l_sprite.img_ptr);
+	if (game.win)
 		mlx_destroy_window(game.mlx, game.win);
-	if(game.mlx)
+	if (game.mlx)
 	{
 		mlx_destroy_display(game.mlx);
 		free(game.mlx);
 	}
-	if(game.map.grid)
+	if (game.map.grid)
 		free_split(game.map.grid);
-	if(game.collects)
+	if (game.collects)
 		free(game.collects);
 	exit(0);
 }

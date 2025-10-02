@@ -6,7 +6,7 @@
 /*   By: gocaetan <gocaetan@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 10:46:59 by gocaetan          #+#    #+#             */
-/*   Updated: 2025/10/01 12:57:25 by gocaetan         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:11:00 by gocaetan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	draw_map(t_game *game)
 					game->collectible.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
 			else if (tile == 'P')
 				mlx_put_image_to_window(game->mlx, game->win,
-					game->player.sprite.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
+					game->player.current_sprite.img_ptr, x * TILE_SIZE, y * TILE_SIZE);
 			else if (tile == 'E')
 			{
 				if (game->map.collectibles == game->player.collected)
@@ -111,11 +111,15 @@ void	init_player(t_game *game)
 	game->player.sprite.img_ptr = mlx_xpm_file_to_image(game->mlx,
 			"sprites/shrek.xpm", &game->player.sprite.width,
 			&game->player.sprite.height);
-	if (!game->player.sprite.img_ptr)
+	game->player.l_sprite.img_ptr = mlx_xpm_file_to_image(game->mlx,
+			"sprites/shrek_left.xpm", &game->player.l_sprite.width,
+			&game->player.l_sprite.height);
+	if (!game->player.sprite.img_ptr || !game->player.l_sprite.img_ptr)
 	{
-		perror("Error loading player sprite");
+		ft_putendl_fd("Error loading player sprite", 1);
 		free_game(*game);
 	}
+	game->player.current_sprite = game->player.sprite;
 }
 
 int	count_collects(t_map mapa)
