@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/05 16:07:38 by marvin            #+#    #+#             */
+/*   Updated: 2025/10/05 19:04:10 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 char	*strjoin_free(char *s1, char *s2)
@@ -25,11 +37,11 @@ int	check_map_elements(char **map)
 	int	c;
 	int	e;
 
-	i = 0;
+	i = -1;
 	p = 0;
 	c = 0;
 	e = 0;
-	while (map[i])
+	while (map[++i])
 	{
 		j = 0;
 		while (map[i][j])
@@ -42,7 +54,6 @@ int	check_map_elements(char **map)
 				e++;
 			j++;
 		}
-		i++;
 	}
 	return (p == 1 && e == 1 && c > 0);
 }
@@ -97,34 +108,48 @@ int	invalid_chr(char **map)
 	return (1);
 }
 
-char	**read_map(char *file)
+static char	*read_lines(int fd)
 {
-	char	**map;
 	char	*line;
 	char	*join;
-	int		fd;
 
-	if (!is_ber(file))
-		return (NULL);
 	join = ft_strdup("");
 	if (!join)
+		return (NULL);
+	line = get_next_line(fd);
+	if (!line)
 	{
+		free(join);
 		return (NULL);
 	}
-	fd = open(file, O_RDONLY);
-	line = get_next_line(fd);
 	while (line != NULL)
 	{
 		if (line[0] == '\n')
 		{
 			free(line);
-			printf("error");
+			free(join);
+			return (NULL);
 		}
 		join = strjoin_free(join, line);
 		free(line);
 		line = get_next_line(fd);
 	}
+	return (join);
+}
+
+char	**read_map(char *file)
+{
+	char	**map;
+	char	*join;
+	int		fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
+	join = read_lines(fd);
 	close(fd);
+	if (!join)
+		return (NULL);
 	map = ft_split(join, '\n');
 	free(join);
 	return (map);

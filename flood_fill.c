@@ -1,5 +1,16 @@
-#include "so_long.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   flood_fill.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/05 10:28:50 by marvin            #+#    #+#             */
+/*   Updated: 2025/10/05 10:28:50 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "so_long.h"
 
 void	fill(char **tab, t_point size, t_point pos, bool *exit)
 {
@@ -24,9 +35,9 @@ void	fill(char **tab, t_point size, t_point pos, bool *exit)
 
 t_point	set_begin(char **map)
 {
-	int i;
-	int j;
-	t_point begin;
+	int		i;
+	int		j;
+	t_point	begin;
 
 	i = 0;
 	while (map[i])
@@ -51,8 +62,10 @@ t_point	set_begin(char **map)
 
 char	**map_dup(char **map, int rows)
 {
-	int i = 0;
-	char **new_map;
+	int		i;
+	char	**new_map;
+
+	i = 0;
 	new_map = malloc(sizeof(char *) * (rows + 1));
 	while (map[i])
 	{
@@ -67,8 +80,8 @@ char	**map_dup(char **map, int rows)
 
 int	check_reachable(char **map)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (map[i])
@@ -85,18 +98,18 @@ int	check_reachable(char **map)
 	return (1);
 }
 
-int	flood_fill(char **map)
+int	flood_fill(t_game *game)
 {
-	int cols = ft_strlen(map[0]);
-	int rows = 0;
-	while (map[rows])
-		rows++;
-	char **to_fill = map_dup(map, rows);
-	t_point size;
-	size.x = cols;
-	size.y = rows;
-	t_point begin = set_begin(to_fill);
-	bool exit = false;
+	char	**to_fill;
+	t_point	size;
+	t_point	begin;
+	bool	exit;
+
+	to_fill = map_dup(game->map.grid, game->map.height);
+	size.x = game->map.width;
+	size.y = game->map.height;
+	begin = set_begin(to_fill);
+	exit = false;
 	fill(to_fill, size, begin, &exit);
 	if (check_reachable(to_fill) && exit)
 	{

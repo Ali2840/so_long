@@ -1,10 +1,24 @@
-#include "so_long.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/05 10:46:47 by marvin            #+#    #+#             */
+/*   Updated: 2025/10/05 10:46:47 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "so_long.h"
 
 int	is_retangular(char **map)
 {
-	size_t len = ft_strlen(map[0]);
-	int i = 1;
+	size_t	len;
+	int		i;
+
+	len = ft_strlen(map[0]);
+	i = 1;
 	while (map[i])
 	{
 		if (ft_strlen(map[i]) != len)
@@ -16,7 +30,7 @@ int	is_retangular(char **map)
 
 int	is_ber(char *file)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(file);
 	if (len < 4)
@@ -28,7 +42,7 @@ int	is_ber(char *file)
 
 void	free_split(char **split)
 {
-	int i;
+	int	i;
 
 	if (!split)
 		return ;
@@ -49,39 +63,9 @@ void	error(char **split)
 	exit(EXIT_FAILURE);
 }
 
-int	main(int ac, char **av)
+int	close_game(t_game *game)
 {
-	t_game game;
-
-	ft_bzero(&game, sizeof(t_game));
-	if (ac != 2)
-	{
-		ft_putendl_fd("Usage: ./so_long map.ber", 2);
-		return (1);
-	}
-	if (!is_ber(av[1]))
-		error(NULL);
-	game.map.grid = read_map(av[1]);
-	if (!game.map.grid)
-		error(NULL);
-	game.map.height = 0;
-	while (game.map.grid[game.map.height])
-		game.map.height++;
-	game.map.width = ft_strlen(game.map.grid[0]);
-	if (!is_retangular(game.map.grid))
-		error(game.map.grid);
-	if (!walls_sorrounded(game.map.grid))
-		error(game.map.grid);
-	if (!check_map_elements(game.map.grid))
-		error(game.map.grid);
-	if (!invalid_chr(game.map.grid))
-		error(game.map.grid);
-	if (!flood_fill(game.map.grid))
-		error(game.map.grid);
-	init_game(&game);
-	draw_map(&game);
-	mlx_key_hook(game.win, key_handler, &game);
-	mlx_hook(game.win, 17, 0, close_game, &game);
-	mlx_loop(game.mlx);
+	free_game(*game);
+	exit(0);
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   moves.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/05 15:19:52 by marvin            #+#    #+#             */
+/*   Updated: 2025/10/05 17:11:37 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	move_player(t_game *game, int dx, int dy)
@@ -17,10 +29,7 @@ void	move_player(t_game *game, int dx, int dy)
 	if (game->map.grid[new_y][new_x] == 'E')
 	{
 		if (game->map.collectibles == game->player.collected)
-		{
-			ft_putendl_fd("Parabens seu ogre", 1);
-			free_game(*game);
-		}
+			winning(game);
 		else
 			return ;
 	}
@@ -28,8 +37,7 @@ void	move_player(t_game *game, int dx, int dy)
 	game->map.grid[new_y][new_x] = 'P';
 	game->player.pos.x = new_x;
 	game->player.pos.y = new_y;
-	game->player.moves++;
-	printf("moves: %d\n", game->player.moves);
+	printf("moves: %d\n", ++game->player.moves);
 	draw_map(game);
 }
 
@@ -39,7 +47,7 @@ int	key_handler(int keycode, void *param)
 
 	game = (t_game *)param;
 	if (keycode == 65307)
-		free_game(*game);
+		close_game(game);
 	if (keycode == 119)
 		move_player(game, 0, -1);
 	if (keycode == 97)
@@ -57,10 +65,11 @@ int	key_handler(int keycode, void *param)
 	return (0);
 }
 
-int	close_game(t_game *game)
+void	winning(t_game *game)
 {
+	ft_putendl_fd("Congratulations you Win", 1);
 	free_game(*game);
-	return (0);
+	exit(0);
 }
 
 void	free_game(t_game game)
@@ -81,14 +90,35 @@ void	free_game(t_game game)
 		mlx_destroy_image(game.mlx, game.player.l_sprite.img_ptr);
 	if (game.win)
 		mlx_destroy_window(game.mlx, game.win);
+	if (game.map.grid)
+		free_split(game.map.grid);
+	if (game.collects)
+		free(game.collects);
 	if (game.mlx)
 	{
 		mlx_destroy_display(game.mlx);
 		free(game.mlx);
 	}
-	if (game.map.grid)
-		free_split(game.map.grid);
-	if (game.collects)
-		free(game.collects);
-	exit(0);
+}
+
+int	count_collects(t_map mapa)
+{
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (mapa.grid[i])
+	{
+		j = 0;
+		while (mapa.grid[i][j])
+		{
+			if (mapa.grid[i][j] == 'C')
+				count++;
+			j++;
+		}
+		i++;
+	}
+	return (count);
 }
